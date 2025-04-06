@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/BTP_Dashboard/static/css/main.22900f63.css",
+    "main.js": "/BTP_Dashboard/static/js/main.38b61e46.js",
+    "static/js/453.ed3810f9.chunk.js": "/BTP_Dashboard/static/js/453.ed3810f9.chunk.js",
+    "index.html": "/BTP_Dashboard/index.html",
+    "main.22900f63.css.map": "/BTP_Dashboard/static/css/main.22900f63.css.map",
+    "main.38b61e46.js.map": "/BTP_Dashboard/static/js/main.38b61e46.js.map",
+    "453.ed3810f9.chunk.js.map": "/BTP_Dashboard/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.22900f63.css",
+    "static/js/main.38b61e46.js"
+  ]
+}
