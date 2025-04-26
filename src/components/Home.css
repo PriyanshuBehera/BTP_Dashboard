@@ -1,0 +1,123 @@
+/* components/Home.css */
+.home-page {
+    padding: 20px 0;
+  }
+  
+  .home-page h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--header-color);
+  }
+  
+  .gauge-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .gauge-item {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .gauge-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .gauge-item h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--text-color);
+  }
+  
+  @media (max-width: 768px) {
+    .gauge-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  .Toastify__toast-container {
+    width: 350px;
+  }
+  
+  .Toastify__toast--error {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+    border-left: 5px solid #DC2626;
+  }
+  
+  .Toastify__toast--warning {
+    background-color: #FEF3C7;
+    color: #92400E;
+    border-left: 5px solid #D97706;
+  }
+  
+  .Toastify__toast--info {
+    background-color: #E0F2FE;
+    color: #0369A1;
+    border-left: 5px solid #0EA5E9;
+  }
+  
+  .Toastify__progress-bar--error {
+    background-color: #DC2626;
+  }
+  
+  .Toastify__progress-bar--warning {
+    background-color: #D97706;
+  }
+  
+  .Toastify__progress-bar--info {
+    background-color: #0EA5E9;
+  }
+  @media (max-width: 768px) {
+    .gauges-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  .fruit-status-container {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .fruit-status-container.fresh {
+    background-color: rgba(0, 255, 0, 0.1);
+    border: 2px solid #00cc00;
+  }
+  
+  .fruit-status-container.rotten {
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 2px solid #cc0000;
+  }
+  
+  .status {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 10px 0;
+  }
+  
+  .status.fresh {
+    background-color: #00cc00;
+    color: white;
+  }
+  
+  .status.rotten {
+    background-color: #cc0000;
+    color: white;
+  }
+  
+  .confidence, .score {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  
+  
