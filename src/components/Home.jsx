@@ -10,29 +10,29 @@ import './Home.css';
 
 // Define threshold values based on safety standards
 const THRESHOLDS = {
-  ch4: { warning: 600, danger: 1200 }, // Methane thresholds in ppm
-  mq135: { warning: 400, danger: 700 }, // CO2 thresholds in ppm
-  voc: { warning: 10, danger: 30 }, // CO thresholds in ppm
-  etoh: { warning: 600, danger: 1000 },
-  temperature: { warning: 30, danger: 50 }, // Temperature thresholds in Celsius
-  humidity: { warning: 60, danger: 100 }, // Humidity thresholds in %
+  ch4: { warning: 1200, danger: 1700 }, // Methane thresholds in ppm
+  mq135: { warning: 240, danger: 100 }, // CO2 thresholds in ppm
+  voc: { warning: 1000, danger: 1100 }, // CO thresholds in ppm
+  etoh: { warning: 400, danger: 600 },
+  temperature: { warning: 50, danger: 50 }, // Temperature thresholds in Celsius
+  humidity: { warning: 110, danger: 110 }, // Humidity thresholds in %
    // Ethanol thresholds in ppm
 };
 // Add these constants at the top of your file, after the THRESHOLDS
 const FRUIT_CLASSIFICATION = {
   // These weights should be replaced with your actual learned weights
   weights: {
-    ch4: 0.0035,      // Methane has strong positive correlation with rottenness
-    mq135: -0.0287,    // CO2 has moderate positive correlation
-    voc: -0.0261,      // VOCs have strong positive correlation
-    temperature: -0.0025,  // Temperature has some positive correlation
-    humidity: -0.0061,     // Humidity has moderate positive correlation
-    etoh: 0.0588     // Ethanol has strong positive correlation with rottenness
+    ch4: 0.0141,      // Methane has strong positive correlation with rottenness
+    mq135: -0.0353,    // CO2 has moderate positive correlation
+    voc: -0.0228,      // VOCs have strong positive correlation
+    temperature: 0,  // Temperature has some positive correlation
+    humidity: 0,     // Humidity has moderate positive correlation
+    etoh: 0.0281    // Ethanol has strong positive correlation with rottenness
   },
   // Threshold for classification (adjust based on your model)
   threshold: 0,
   // Bias term (adjust based on your model)
-  bias: -0.0003
+  bias: -0.0001
 };
 
 // Add this function inside your Home component
@@ -47,8 +47,8 @@ const classifyFruit = (parameters) => {
       weightedSum += parameters[param] * FRUIT_CLASSIFICATION.weights[param];
     }
   });
-  
   // Classify based on threshold
+  console.log(weightedSum>FRUIT_CLASSIFICATION.threshold);
   return {
     isRotten: weightedSum > FRUIT_CLASSIFICATION.threshold,
     score: weightedSum,
@@ -166,12 +166,12 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
     // Show fruit classification result if not already processed
     if (!processedAlerts[fruitAlertKey]) {
       const message = fruitStatus.isRotten 
-        ? `ALERT: Fruit is likely ROTTEN (confidence: ${fruitStatus.confidence.toFixed(1)}%)`
-        : `INFO: Fruit appears to be FRESH (confidence: ${fruitStatus.confidence.toFixed(1)}%)`;
+        ? `ALERT: Fruit is likely ROTTEN`
+        : `INFO: Fruit appears to be FRESH`;
       
       showToastAlert(message, fruitStatus.isRotten ? 'error' : 'success', fruitAlertKey);
       saveProcessedAlert(fruitAlertKey, true);
-      
+      console.log(fruitStatus.isRotten);
       // Add fruit status to alerts if rotten
       if (fruitStatus.isRotten) {
         currentAlerts.fruitStatus = {
@@ -190,6 +190,57 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
       if (!threshold) return;
       
       // Check if value exceeds danger threshold
+      if(param === 'mq135'){
+        if (value <= threshold.warning) {
+          currentAlerts[param] = {
+            value,
+            severity: 'warning',
+            threshold: threshold.warning,
+            label: parameterConfig[param]?.label || param.toUpperCase()
+          };
+          
+          // Create a unique key for this alert
+          const alertKey = `${param}_warning_${timestamp}`;
+          
+          // Only show toast if we haven't processed this alert before
+          if (!processedAlerts[alertKey]) {
+            hasChanges = true;
+            
+            // Show toast for this parameter
+            const message = `WARNING: ${parameterConfig[param].label} level is at ${value}, which exceeds the warning threshold of ${threshold.warning}`;
+            showToastAlert(message, 'warning', alertKey);
+            
+            // Mark this alert as processed
+            saveProcessedAlert(alertKey, true);
+          }
+        }
+      else if (value <= threshold.danger) {
+        currentAlerts[param] = {
+          value,
+          severity: 'danger',
+          threshold: threshold.danger,
+          label: parameterConfig[param]?.label || param.toUpperCase()
+        };
+        
+        // Create a unique key for this alert
+        const alertKey = `${param}_danger_${timestamp}`;
+        
+        // Only show toast if we haven't processed this alert before
+        if (!processedAlerts[alertKey]) {
+          hasChanges = true;
+          
+          // Show toast for this parameter
+          const message = `DANGER: ${parameterConfig[param].label} level is at ${value}, which exceeds the danger threshold of ${threshold.danger}`;
+          showToastAlert(message, 'error', alertKey);
+          
+          // Mark this alert as processed
+          saveProcessedAlert(alertKey, true);
+        }
+      }
+      // Check if value exceeds warning threshold
+      
+    }
+    else{
       if (value >= threshold.danger) {
         currentAlerts[param] = {
           value,
@@ -237,6 +288,7 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
           saveProcessedAlert(alertKey, true);
         }
       }
+    }
     });
     
     // Update our current state reference
@@ -253,6 +305,7 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
     
     // Check if we've already sent an email for this timestamp
     const now = Date.now();
+    if(fruitStatus.isRotten){
     if (Object.keys(currentAlerts).length > 0 && 
         !processedAlerts[emailAlertKey] &&
         now - lastEmailSentTimestamp.current > 60000) { // Still keep rate limiting
@@ -264,7 +317,7 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
       // Mark this email as sent
       saveProcessedAlert(emailAlertKey, true);
     }
-    
+  }
     // Mark this reading as processed
     saveProcessedAlert(`reading_${timestamp}`, true);
   };
@@ -325,7 +378,7 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
       });
       
       const templateParams = {
-        subject: `${severity} Alert: Multiple Parameters Exceeding Thresholds`,
+        subject: `Fruit rotten`,
         message: alertMessage,
         timestamp: new Date(timestamp).toLocaleString(),
         // Create individual fields for each parameter for template flexibility
@@ -343,15 +396,17 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
         etoh_status: alerts.etoh ? alerts.etoh.severity.toUpperCase() : 'Normal'
       };
       
-      // const response = await emailjs.send(
-      //   'service_479nahw', // Replace with your EmailJS service ID
-      //   'template_uws417s', // Replace with your EmailJS template ID
-      //   templateParams
-      // );
+      const response = await emailjs.send(
+        'service_479nahw', // Replace with your EmailJS service ID
+        'template_uws417s', // Replace with your EmailJS template ID
+        templateParams
+      );
       
-      // if (response.status === 200) {
+      if (response.status === 200) {
         console.log(`Consolidated email alert sent with ${Object.keys(alerts).length} parameters for timestamp ${timestamp}`);
-      // }
+        showToastAlert(`Email Sent`, '', `email_error_${timestamp}`);
+
+      }
     } catch (error) {
       console.error('Error sending consolidated email alert:', error);
       showToastAlert(`Failed to send email alert: ${error.message}`, 'error', `email_error_${timestamp}`);
@@ -403,9 +458,9 @@ const Home = ({ currentValues: initialValues, parameterConfig, database }) => {
       <span className="status fresh">FRESH</span>
     }
   </div>
-  <div className="confidence">
+  {/* <div className="confidence">
     Confidence: {classifyFruit(values).confidence.toFixed(1)}%
-  </div>
+  </div> */}
   <div className="score">
     Score: {classifyFruit(values).score.toFixed(2)}
   </div>

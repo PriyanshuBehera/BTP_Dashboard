@@ -58,45 +58,45 @@ function App() {
   // Parameter ranges and colors
   const parameterConfig = {
     ch4: {
-      label: 'Methane (CH₄)',
+      label: 'Methane (CH₄) sensor values',
       min: 0,
-      max: 1800,
+      max: 2500,
       colors: ['#5BE12C', '#F5CD19', '#EA4228'],
       ranges: [
-        { limit: 600, color: '#5BE12C', showTick: true },
-        { limit: 1200, color: '#F5CD19', showTick: true },
-        { limit: 1800, color: '#EA4228', showTick: true }
+        { limit: 1200, color: '#5BE12C', showTick: true },
+        { limit: 1700, color: '#F5CD19', showTick: true },
+        { limit: 2500, color: '#EA4228', showTick: true }
       ]
     },
     mq135: {
-      label: 'MQ135 Sensor',
+      label: 'MQ135 Sensor values',
+      min: 0,
+      max: 500,
+      colors: ['#5BE12C', '#F5CD19', '#EA4228'],  
+      ranges: [
+        { limit: 100, color: '#EA4228', showTick: true },
+        { limit: 240, color: '#F5CD19', showTick: true },
+        { limit: 500, color: '#5BE12C', showTick: true }
+      ]
+    },
+    voc: {
+      label: 'Volatile Organic Compound(VOC) sensor values',
+      min: 0,
+      max: 2000,
+      colors: ['#5BE12C', '#F5CD19', '#EA4228'],
+      ranges: [
+        { limit: 1000, color: '#5BE12C', showTick: true },
+        { limit: 1100, color: '#F5CD19', showTick: true },
+        { limit: 2000, color: '#EA4228', showTick: true }
+      ]
+    },
+    etoh: {
+      label: 'Ethanol sensor values',
       min: 0,
       max: 1000,
       colors: ['#5BE12C', '#F5CD19', '#EA4228'],
       ranges: [
         { limit: 400, color: '#5BE12C', showTick: true },
-        { limit: 700, color: '#F5CD19', showTick: true },
-        { limit: 1000, color: '#EA4228', showTick: true }
-      ]
-    },
-    voc: {
-      label: 'Volatile Organic Compound(VOC)',
-      min: 0,
-      max: 50,
-      colors: ['#5BE12C', '#F5CD19', '#EA4228'],
-      ranges: [
-        { limit: 10, color: '#5BE12C', showTick: true },
-        { limit: 30, color: '#F5CD19', showTick: true },
-        { limit: 50, color: '#EA4228', showTick: true }
-      ]
-    },
-    etoh: {
-      label: 'Ethanol',
-      min: 0,
-      max: 1000,
-      colors: ['#5BE12C', '#F5CD19', '#EA4228'],
-      ranges: [
-        { limit: 300, color: '#5BE12C', showTick: true },
         { limit: 600, color: '#F5CD19', showTick: true },
         { limit: 1000, color: '#EA4228', showTick: true }
       ]
@@ -107,8 +107,8 @@ function App() {
       max: 50,
       colors: ['#5BE12C', '#F5CD19', '#EA4228'],
       ranges: [
-        { limit: 15, color: '#5BE12C', showTick: true },
-        { limit: 30, color: '#F5CD19', showTick: true },
+        { limit: 30, color: '#5BE12C', showTick: true },
+        { limit: 40, color: '#F5CD19', showTick: true },
         { limit: 50, color: '#EA4228', showTick: true }
       ]
     },
@@ -118,9 +118,9 @@ function App() {
       max: 100,
       colors: ['#EA4228', '#F5CD19', '#5BE12C'],
       ranges: [
-        { limit: 30, color: '#EA4228', showTick: true },
+        { limit: 40, color: '#5BE12C', showTick: true },
         { limit: 60, color: '#F5CD19', showTick: true },
-        { limit: 100, color: '#5BE12C', showTick: true }
+        { limit: 100, color: '#EA4228', showTick: true }
       ]
     },
     
