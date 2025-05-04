@@ -441,10 +441,10 @@ function App() {
           </div>
           
           <div className="stats-container">
-            <StatCard title="Current" value={stats.current} unit={filteredReadings.length > 0 ? filteredReadings[0].units[selectedParameter] : ''} />
-            <StatCard title="Minimum" value={stats.min} unit={filteredReadings.length > 0 ? filteredReadings[0].units[selectedParameter] : ''} />
-            <StatCard title="Maximum" value={stats.max} unit={filteredReadings.length > 0 ? filteredReadings[0].units[selectedParameter] : ''} />
-            <StatCard title="Average" value={stats.avg} unit={filteredReadings.length > 0 ? filteredReadings[0].units[selectedParameter] : ''} />
+            <StatCard title="Current" value={stats.current} unit={filteredReadings.length > 0 ? '' : ''} />
+            <StatCard title="Minimum" value={stats.min} unit={filteredReadings.length > 0 ? '' : ''} />
+            <StatCard title="Maximum" value={stats.max} unit={filteredReadings.length > 0 ? '': ''} />
+            <StatCard title="Average" value={stats.avg} unit={filteredReadings.length > 0 ? '' : ''} />
           </div>
           
           <div className="chart-container">
